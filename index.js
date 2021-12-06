@@ -3,10 +3,18 @@ await import("dotenv").then((dotenv) => dotenv.config());
 const { PORT, HOST } = process.env; // getting the environment variables
 import express from "express"; // importing express framework
 import cors from "cors";
+import session from "express-session";
 const app = express(); // creating a new express application
 import * as routes from "./routers/index.js";
 app
-  .use(cors()) 
+  .use(cors())
+  .use(
+    session({
+      secret: "notagoodsecret",
+      resave: false,
+      saveUninitialized: true,
+    })
+  )
   .use(express.urlencoded({ extended: true })) // parsing request body
   .use(express.static("public")) // serving static files
   .use(routes.root) // route controller for "/"
